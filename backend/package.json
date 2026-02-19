@@ -13,6 +13,7 @@
   "description": "",
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "chatapp": "file:..",
     "cookie-parser": "^1.4.7",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
@@ -20,6 +21,7 @@
     "mongoose": "^8.10.1"
   },
   "devDependencies": {
-    "nodemon": "^3.1.11"
+    "cross-env": "^10.1.0",
+    "nodemon": "^1.0.2"
   }
 }
