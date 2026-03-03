@@ -5,6 +5,7 @@ import express from "express";
 import authRoutes from "./routes/auth.route.js";
 import messageRoutes from "./routes/message.route.js";
 import { connectDB } from "./lib/db.js";
+import cookieParser from "cookie-parser";
 
 
 const app = express();
@@ -15,7 +16,7 @@ app.use(express.json()); // Middleware to parse JSON bodies in requests req.body
 
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
-
+app.use(cookieParser()); // Middleware to parse cookies in requests req.cookies
 
 
 app.listen(PORT, () => {
