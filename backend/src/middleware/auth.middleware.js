@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 import { ENV } from "../lib/env.js";
 
-export const protectRoute = async (res,req,next) => {
+export const protectRoute = async (req, res, next) => {
     try {
         const token = req.cookies.jwt;
         if(!token) { return res.status(401).json({message:"Unauthorized- No token provided"})}
@@ -14,6 +14,7 @@ export const protectRoute = async (res,req,next) => {
         if(!user) { return res.status(404).json({message:"User not found"})}
 
         req.user = user; // Attach user to request object for use in next middleware or route handler
+        next(); // Proceed to the next middleware or route handler
 
     } catch (error) {
         console.error("Error in protectRoute middleware", error);

@@ -12,11 +12,12 @@ const app = express();
 
 const PORT = process.env.PORT || 3000;
 
-app.use(express.json()); // Middleware to parse JSON bodies in requests req.body 
+app.use(express.json()); // Middleware to parse JSON bodies in requests req.body
+app.use(cookieParser()); // Middleware to parse cookies in requests req.cookies 
 
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
-app.use(cookieParser()); // Middleware to parse cookies in requests req.cookies
+
 
 
 app.listen(PORT, () => {
