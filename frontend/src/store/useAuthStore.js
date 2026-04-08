@@ -47,7 +47,7 @@ export const useAuthStore = create((set) => ({
             //toast notification for success can be added here
             toast.success("Logged in successfully");
         } catch (error) {
-            toast.error(error.response.data.message);
+            toast.error(error?.response?.data?.message || "Something went wrong");
         } finally {
             set({isLoggingIn: false});
         }
@@ -55,7 +55,7 @@ export const useAuthStore = create((set) => ({
 
     logout: async() => {
         try {
-            await axiosInstance.post("auth/logout");
+            await axiosInstance.post("/auth/logout");
             set({ authUser: null });
             toast.success("Logged out successfully");
         } catch (error) {
