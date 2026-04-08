@@ -4,14 +4,21 @@ import UsersLoadingSkeleton from "./UsersLoadingSkeleton";
 import { useAuthStore } from "../store/useAuthStore";
 
 function ContactList() {
-  const { getAllContacts, allContacts, setSelectedUser, isUsersLoading } = useChatStore();
-  const { onlineUsers } = useAuthStore();
+  // 1. Destructure with default values [] to prevent .map and .includes crashes
+  const { getAllContacts, allContacts = [], setSelectedUser, isUsersLoading } = useChatStore();
+  const { onlineUsers = [] } = useAuthStore(); 
 
   useEffect(() => {
     getAllContacts();
   }, [getAllContacts]);
 
+  // 2. Handle the loading state
   if (isUsersLoading) return <UsersLoadingSkeleton />;
+
+  // 3. Safety check: If allContacts isn't an array or is empty, show a message instead of crashing
+  if (!Array.isArray(allContacts) || allContacts.length === 0) {
+    return <div className="p-4 text-center text-zinc-500">No contacts found</div>;
+  }
 
   return (
     <>
@@ -22,16 +29,22 @@ function ContactList() {
           onClick={() => setSelectedUser(contact)}
         >
           <div className="flex items-center gap-3">
+            {/* 4. Safe check for online status */}
             <div className={`avatar ${onlineUsers.includes(contact._id) ? "online" : "offline"}`}>
               <div className="size-12 rounded-full">
-                <img src={contact.profilePic || "/avatar.png"} />
+                <img 
+                  src={contact.profilePic || "/avatar.png"} 
+                  alt={contact.fullName} 
+                  onError={(e) => { e.target.src = "/avatar.png"; }} // Fallback if image fails
+                />
               </div>
             </div>
-            <h4 className="text-slate-200 font-medium">{contact.fullName}</h4>
+            <h4 className="text-slate-200 font-medium truncate">{contact.fullName}</h4>
           </div>
         </div>
       ))}
     </>
   );
 }
+
 export default ContactList;

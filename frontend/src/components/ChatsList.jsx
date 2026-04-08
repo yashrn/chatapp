@@ -5,15 +5,18 @@ import NoChatsFound from "./NoChatsFound";
 import { useAuthStore } from "../store/useAuthStore";
 
 function ChatsList() {
-  const { getMyChatPartners, chats, isUsersLoading, setSelectedUser } = useChatStore();
-  const { onlineUsers } = useAuthStore();
+  // Add a default value [] to onlineUsers to prevent .includes() from crashing
+  const { getMyChatPartners, chats = [], isUsersLoading, setSelectedUser } = useChatStore();
+  const { onlineUsers = [] } = useAuthStore(); 
 
   useEffect(() => {
     getMyChatPartners();
   }, [getMyChatPartners]);
 
   if (isUsersLoading) return <UsersLoadingSkeleton />;
-  if (chats.length === 0) return <NoChatsFound />;
+  
+  // Extra safety check for the map function
+  if (!Array.isArray(chats) || chats.length === 0) return <NoChatsFound />;
 
   return (
     <>
@@ -24,6 +27,7 @@ function ChatsList() {
           onClick={() => setSelectedUser(chat)}
         >
           <div className="flex items-center gap-3">
+            {/* The .includes check is now safe because onlineUsers is defaulted to [] */}
             <div className={`avatar ${onlineUsers.includes(chat._id) ? "online" : "offline"}`}>
               <div className="size-12 rounded-full">
                 <img src={chat.profilePic || "/avatar.png"} alt={chat.fullName} />
@@ -36,4 +40,5 @@ function ChatsList() {
     </>
   );
 }
+
 export default ChatsList;

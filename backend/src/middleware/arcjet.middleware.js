@@ -24,9 +24,8 @@ export const arcjetProtection = async (req, res, next) => {
                 message: "Malicious bot activity detected."
             });
         }
-
-        next(); // Allow the request to proceed if not denied
     }
+    next(); // Allow the request to proceed if not denied
 
     } catch (error) {
         console.log("Arcjet Protection Error:", error);
